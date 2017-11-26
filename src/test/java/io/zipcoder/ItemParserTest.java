@@ -111,4 +111,9 @@ public class ItemParserTest {
 
         Assert.assertEquals(expected, actual, 0);
     }
+
+    @Test
+    public void generateOutputTest(){
+
+    }
 }

@@ -34,69 +34,76 @@ public class Main {
             }
         }
 
-        System.out.println(generateOutput(items));
-
-
-
-        //System.out.println(prices);
-        //System.out.println(numberOfApples + " " + numberOfBread + " " + numberOfCookies + " " + numberOfMilk);
-
-//        // prints entire Item list
-//        int itemNumber = 1;
-//        for (Item item : items){
-//            System.out.println(itemNumber + " " + item);
-//            itemNumber++;
-//        }
-
-        //System.out.println(numberOfErrors);
+        System.out.println(generateEachItemArray(items));
 
 
     }
 
-    public static String generateOutput(ArrayList<Item> items){
-        int numberOfBread = 0;
-        int numberOfMilk = 0;
-        int numberOfApples = 0;
-        int numberOfCookies = 0;
-        ArrayList<Double> milkPrices = new ArrayList<>();
-        ArrayList<Double> breadPrices = new ArrayList<>();
-        ArrayList<Double> applePrices = new ArrayList<>();
-        ArrayList<Double> cookiePrices = new ArrayList<>();
-        ArrayList<String> typesOfFood = new ArrayList<>();
+    public static String generateEachItemArray(ArrayList<Item> items){
+
+        ArrayList<ArrayList<Item>> allItems = new ArrayList<>();
+
+        ArrayList<Item> milks = new ArrayList<>();
+        ArrayList<Item> breads = new ArrayList<>();
+        ArrayList<Item> apples = new ArrayList<>();
+        ArrayList<Item> cookies = new ArrayList<>();
+
+        String output = "";
 
         for (Item item : items){
             switch (item.getName()){
                 case "Milk":
-                    if (!(milkPrices.contains(item.getPrice()))){
-                        milkPrices.add(item.getPrice());
-                    }
-                    numberOfMilk++;
+                    milks.add(item);
                     break;
                 case "Bread":
-                    if (!(breadPrices.contains(item.getPrice()))){
-                        breadPrices.add(item.getPrice());
-                    }
-                    numberOfBread++;
+                    breads.add(item);
                     break;
                 case "Apples":
-                    if (!(applePrices.contains(item.getPrice()))){
-                        applePrices.add(item.getPrice());
-                    }
-                    numberOfApples++;
+                    apples.add(item);
                     break;
                 case "Cookies":
-                    if (!(cookiePrices.contains(item.getPrice()))){
-                        cookiePrices.add(item.getPrice());
-                    }
-                    numberOfCookies++;
+                    cookies.add(item);
                     break;
             }
-            if (!(typesOfFood.contains(item.getName()))){
-                typesOfFood.add(item.getName());
-            }
-            //System.out.println(item.getName() + " = $" + item.getPrice());
         }
-        System.out.println(typesOfFood);
-        return "testing";
+
+        allItems.add(apples);
+        allItems.add(cookies);
+        allItems.add(breads);
+        allItems.add(milks);
+
+        for (ArrayList<Item> eachItem : allItems){
+            output += generateOutput(eachItem) + "\n";
+            //System.out.println(temp);
+        }
+
+        return output;
+    }
+
+    public static String generateOutput(ArrayList<Item> items){
+        String output = "name:   " + items.get(0).getName() + "       seen: " + items.size() + "times\n" +
+                "================      =================\n";
+
+        // find possible prices
+        ArrayList<Double> prices = new ArrayList<>();
+        for (Item item : items){
+            if (!(prices.contains(item.getPrice()))){
+                prices.add(item.getPrice());
+            }
+        }
+
+        if (prices.size() == 1){
+            output += "Price:  " + prices.get(0) + "         seen: " + items.size() + "\n" +
+                    "---------------        --------------\n";
+        } else {
+            for (Double price : prices){
+
+            }
+        }
+
+        for (Item item : items){
+
+        }
+        return output;
     }
 }
