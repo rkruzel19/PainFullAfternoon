@@ -34,7 +34,10 @@ public class Main {
             }
         }
 
-        System.out.println(generateEachItemArray(items));
+        String list = generateEachItemArray(items);
+        list += "Errors                    seen: " + numberOfErrors + " times";
+        System.out.println(list);
+
 
 
     }
@@ -74,15 +77,14 @@ public class Main {
 
         for (ArrayList<Item> eachItem : allItems){
             output += generateOutput(eachItem) + "\n";
-            //System.out.println(temp);
         }
 
         return output;
     }
 
     public static String generateOutput(ArrayList<Item> items){
-        String output = "name:   " + items.get(0).getName() + "       seen: " + items.size() + "times\n" +
-                "================      =================\n";
+        String output = "name:   " + items.get(0).getName() + "               seen: " + items.size() + " times\n" +
+                "================          =================\n";
 
         // find possible prices
         ArrayList<Double> prices = new ArrayList<>();
@@ -93,16 +95,22 @@ public class Main {
         }
 
         if (prices.size() == 1){
-            output += "Price:  " + prices.get(0) + "         seen: " + items.size() + "\n" +
-                    "---------------        --------------\n";
+            output += "Price:  " + prices.get(0) + "               seen: " + items.size() + " times\n" +
+                    "----------------          --------------\n";
         } else {
             for (Double price : prices){
-
+                int numberSeen = 0;
+                for (Item item : items){
+                    if (price.equals(item.getPrice())){
+                        numberSeen++;
+                    }
+                }
+                output += "Price:  " + price + "               seen: " + numberSeen + " times\n" +
+                "---------------           --------------\n";
             }
         }
 
         for (Item item : items){
-
         }
         return output;
     }
