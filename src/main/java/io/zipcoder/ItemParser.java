@@ -2,6 +2,8 @@ package io.zipcoder;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class ItemParser {
 
@@ -12,8 +14,37 @@ public class ItemParser {
         return response;
     }
 
-    public Item parseStringIntoItem(String rawItem) throws ItemParseException{
-        return null;
+    public Item parseStringIntoItem(String rawItem) throws ItemParseException {
+        String name = null;
+        Double price = null;
+        String type = null;
+        String expiration = null;
+
+        String nameRegex = "[nN]..[eE].*";
+        String priceRegex = ".*[pP]...e.*";
+        String typeRegex = ".*type.*";
+        String expirationRegex = ".*expiration.*";
+
+        //System.out.println(rawItem);
+        //rawItem = rawItem.replaceAll("#", "");
+
+        ArrayList<String> itemDetails = findPairsInItemString(rawItem);
+        for (String detail : itemDetails){
+            if (detail.matches(nameRegex)){
+                name = this.parseName(detail);
+            }
+            if (detail.matches(priceRegex)){
+                price = this.parsePrice(detail);
+            }
+            if (detail.matches(typeRegex)){
+                type = this.parseType(detail);
+            }
+            if (detail.matches(expirationRegex)){
+                expiration = this.parseExpiration(detail);
+            }
+        }
+
+        return new Item(name, price, type, expiration);
     }
 
     public ArrayList<String> findKeyValuePairsInRawItemData(String rawItem){
@@ -24,6 +55,68 @@ public class ItemParser {
 
     private ArrayList<String> splitStringWithRegexPattern(String stringPattern, String inputString){
         return new ArrayList<String>(Arrays.asList(inputString.split(stringPattern)));
+    }
+
+    public ArrayList<String> findPairsInItemString(String item){
+        String stringPattern = "[;%!@^*]";
+        ArrayList<String> response = splitStringWithRegexPattern(stringPattern, item);
+        return response;
+    }
+
+    public String parseName(String rawItem){
+        String cookieRegEx = ".*[cC]..k.e[sS].*";
+        String breadRegEx = ".*Br..D.*";
+        String applesRegEx = ".*apPles.*";
+        String milkRegEx = ".*Mi.[kK].*";
+
+        String name = null;
+        //rawItem = rawItem.replaceAll("(?i)(^name:)", "");
+        if(rawItem.matches(cookieRegEx)){
+            name = "Cookies";
+        }
+        if(rawItem.matches(milkRegEx)){
+            name = "Milk";
+        }
+        if(rawItem.matches(breadRegEx)){
+            name = "Bread";
+        }
+        if(rawItem.matches(applesRegEx)){
+            name = "Apples";
+        }
+        return name;
+    }
+
+    public Double parsePrice(String rawItem){
+        String priceRegEx = "\\d\\.\\d+";
+        Double price = null;
+        Pattern pattern = Pattern.compile(priceRegEx);
+        Matcher matcher = pattern.matcher(rawItem);
+        if (matcher.find()){
+            price = Double.parseDouble(matcher.group(0));
+        }
+        return price;
+    }
+
+    public String parseType(String rawItem){
+        String typeRegEx = ".*type.*";
+        String type = null;
+
+        if (rawItem.matches(typeRegEx)){
+            type = "Food";
+        }
+        return type;
+    }
+
+    public String parseExpiration(String rawItem){
+
+        String expirationRegEx = "\\d/\\d+/\\d+";
+        String expiration = null;
+        Pattern pattern = Pattern.compile(expirationRegEx);
+        Matcher matcher = pattern.matcher(rawItem);
+        if (matcher.find()){
+            expiration = matcher.group(0);
+        }
+        return expiration;
     }
 
 
