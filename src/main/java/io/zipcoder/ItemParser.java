@@ -25,9 +25,6 @@ public class ItemParser {
         String typeRegex = ".*type.*";
         String expirationRegex = ".*expiration.*";
 
-        //System.out.println(rawItem);
-        //rawItem = rawItem.replaceAll("#", "");
-
         ArrayList<String> itemDetails = findPairsInItemString(rawItem);
         for (String detail : itemDetails){
             if (detail.matches(nameRegex)){
@@ -44,7 +41,12 @@ public class ItemParser {
             }
         }
 
-        return new Item(name, price, type, expiration);
+        if (name == null || price == null || type == null || expiration == null){
+            throw new ItemParseException();
+            //return null;
+        } else {
+            return new Item(name, price, type, expiration);
+        }
     }
 
     public ArrayList<String> findKeyValuePairsInRawItemData(String rawItem){
@@ -70,7 +72,6 @@ public class ItemParser {
         String milkRegEx = ".*Mi.[kK].*";
 
         String name = null;
-        //rawItem = rawItem.replaceAll("(?i)(^name:)", "");
         if(rawItem.matches(cookieRegEx)){
             name = "Cookies";
         }

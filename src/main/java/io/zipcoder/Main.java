@@ -21,19 +21,35 @@ public class Main {
         ItemParser itemParser = new ItemParser();
         ArrayList<String> arrayListOfStringItems = itemParser.parseRawDataIntoStringArray(output);
 
+        ArrayList<Item> items = new ArrayList<Item>();
+        int numberOfErrors = 0;
+        int numberOfBread = 0;
+        int numberOfMilk = 0;
+        int numberOfApples = 0;
+        int numberOfCookies = 0;
 
-        ArrayList<ArrayList<String>> arrayListOfItems = new ArrayList<ArrayList<String>>();
+        for (String item : arrayListOfStringItems) {
+            try {
+                Item newItem = itemParser.parseStringIntoItem(item);
+                items.add(newItem);
+            } catch (ItemParseException ipe){
+                numberOfErrors++;
+            }
+        }
 
+        for (Item item : items){
+            System.out.println(item.getName());
+        }
 
-        System.out.println(arrayListOfStringItems.get(0));
-
-//        for (String item : arrayListOfStringItems){
-//            ArrayList<String> itemDetails = itemParser.findPairsInItemString(item);
-//            arrayListOfItems.add(itemDetails);
+//        // prints entire Item list
+//        int itemNumber = 1;
+//        for (Item item : items){
+//            System.out.println(itemNumber + " " + item);
+//            itemNumber++;
 //        }
-//
-//        for (ArrayList<String> item : arrayListOfItems){
-//            System.out.println(item);
-//        }
+
+        //System.out.println(numberOfErrors);
+
+
     }
 }
